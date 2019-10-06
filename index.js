@@ -1,7 +1,7 @@
 module.exports = Phrase;
 
 // Adds `reverse` to all strings.
-String.prototype.reverse = function reverse() {
+String.prototype.reverse = function() {
   return Array.from(this).reverse().join("");
 };
 
@@ -9,35 +9,28 @@ String.prototype.reverse = function reverse() {
 function Phrase(content) {
   this.content = content;
 
-  this.processor = function(string) {
-    return string.toLowerCase();
-  };
-
   // Returns content processed for palindrome testing.
   this.processedContent = function processedContent() {
-    return this.processor(this.content);
+    return this.letters().toLowerCase();
   };
 
-  // Returns true for a palindrome, false otherwise.
+  // Returns the letters in the content.
+  // For example:
+  //   new Phrase("Hello, world!").letters() === "Helloworld"
+  this.letters = function letters() {
+    return (this.content.match(/[a-z]/gi) || []).join("");
+  };
+
+  // Returns true if the phrase is a palindrome, false otherwise.
   this.palindrome = function palindrome() {
-    return this.processedContent() === this.processedContent().reverse();
+    if (this.content) {
+      return this.processedContent() === this.processedContent().reverse();
+    } else {
+      return false;
+    }
   };
 }
 
 String.prototype.palindrome = function palindrome() {
   return new Phrase(this).palindrome();
 };
-/*
-// Defines a TranslatedPhrase object.
-function TranslatedPhrase(content, translation) {
-  this.content = content;
-  this.translation = translation;
-
-  // Returns content processed for palindrome testing.
-  this.processedContent = function processedContent() {
-    return this.processor(this.translation);
-  };
-}
-
-TranslatedPhrase.prototype = new Phrase();
-*/
